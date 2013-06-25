@@ -2,12 +2,12 @@
 use Behat\Behat\Context\BehatContext;
 use Behat\Behat\Exception\PendingException;
 
-require_once 'PHPUnit/Autoload.php';
-require_once 'PHPUnit/Framework/Assert/Functions.php';
-
 class ScheduleContext extends BehatContext
 {
 
+    /**
+     * @var SchoolClass
+     */
     private $schoolClass;
 
     /**

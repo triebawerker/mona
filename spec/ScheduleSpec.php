@@ -6,7 +6,6 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Prophecy\Prophet;
 
-require_once ('/home/micha/Micha/MoNa/bdd/src/SchoolClass.php');
 
 class ScheduleSpec extends ObjectBehavior
 {
