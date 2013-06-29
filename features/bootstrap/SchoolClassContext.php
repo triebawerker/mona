@@ -52,4 +52,22 @@ class ScheduleContext extends BehatContext
         assertInstanceOf('ClassRoom', $this->schoolClass->getClassRoom());
     }
 
+    /**
+     * @Given /^I get the start date$/
+     */
+    public function iGetTheStartDate()
+    {
+        $this->schoolClass->setStartDate(new DateTime());
+        assertInstanceOf('DateTime', $this->schoolClass->getStartDate());
+    }
+
+    /**
+     * @Given /^I get the duration$/
+     */
+    public function iGetTheDuration()
+    {
+        $this->schoolClass->setDuration(90);
+        $this->schoolClass->getDuration();
+
+    }
 }

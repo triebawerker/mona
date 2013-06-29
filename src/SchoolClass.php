@@ -18,6 +18,21 @@ class SchoolClass
      */
     private $teacher;
 
+    /**
+     * @var DateTime
+     */
+    private $startDate;
+
+    /**
+     * @var string
+     */
+    private $startTime;
+
+    /**
+     * @var integer
+     */
+    private $duration;
+
     public function setName($name)
     {
         $this->name = $name;
@@ -52,6 +67,49 @@ class SchoolClass
     public function getTeacher()
     {
         return $this->teacher;
+    }
+
+
+    public function setStartDate(DateTime $date)
+    {
+        $this->startDate = $date;
+    }
+
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @param int $duration
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @param string $startTime
+     */
+    public function setStartTime($startTime)
+    {
+        $this->startTime = $startTime;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
     }
 
 }

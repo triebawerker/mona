@@ -19,3 +19,15 @@ Feature: Create a schedule
     When I assign a school class to a time slot
     Then the time slot is allocated
       And could not be allocated again
+      And has a start point
+      And has an end point
+
+  Scenario: A schedule has a defined number of time slots
+    When a time time slot has a length of 15 minutes
+      And the schedule's week has 7 days
+      And the the schedule's day has 24 hours
+    Then I should have 7*24*4 time slots
+
+  Scenario: Check time slots for overlap
+    When I set up time slots in my schedule
+    Then the time slots must not overlap

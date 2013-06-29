@@ -3,6 +3,7 @@
 class Schedule
 {
 
+
     /**
      * @var SchoolClass
      */
@@ -12,14 +13,25 @@ class Schedule
      * @var array TimeSlot
      */
     private $timeSlots = array();
+    /**
+     * @var int
+     */
+    private $timeSlotLength;
 
-    public function addSchoolClass($schoolClass)
-    {
-        $this->schoolClass = $schoolClass;
-    }
+    /**
+     * @var int
+     */
+    private $days;
 
-    public function addSchool(SchoolClass $schoolClass)
+    /**
+     * @var int
+     */
+    private $hours;
+
+    public function addSchoolClass(SchoolClass $schoolClass)
     {
+        $timeSlot = new TimeSlot();
+        $this->addTimeslot($timeSlot);
         array_push($this->schoolClass, $schoolClass);
     }
 
@@ -36,7 +48,7 @@ class Schedule
     /**
      * @param TimeSlot $timeSlot
      */
-    public function addTimeslot($timeSlot)
+    private function addTimeslot($timeSlot)
     {
         array_push($this->timeSlots, $timeSlot);
     }
@@ -57,19 +69,39 @@ class Schedule
         return $bookedSlots;
     }
 
-    /**
-     * @return TimeSlot[]
-     */
-    public function getFreeSlots()
+    public function setTimeSlotLength($length)
     {
-        $freeSlots = array();
-        foreach ($this->timeSlots as $slot) {
-            if ($slot->isAllocated()) {
-                continue;
-            } else {
-                array_push($freeSlots, $slot);
-            }
-        }
-        return $freeSlots;
+        $this->timeSlotLength = $length;
+    }
+
+    public function getTimeSlotLength()
+    {
+        return $this->timeSlotLength;
+    }
+
+    public function setDays($days)
+    {
+        $this->days = $days;
+    }
+
+    public function getDays()
+    {
+        return $this->days;
+    }
+
+    public function setHours($hours)
+    {
+        $this->hours = $hours;
+    }
+
+    public function getHours()
+    {
+        return $this->hours;
+    }
+
+    public function getScheduleNumberOfSlots()
+    {
+        $slotLengthPerHour = 60/$this->getTimeSlotLength();
+        return $this->getDays() * $this->getHours() * $slotLengthPerHour;
     }
 }

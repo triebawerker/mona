@@ -40,4 +40,10 @@ class SchoolClassSpec extends ObjectBehavior
         $this->setClassRoom($dummyClassRoom);
         $this->getClassRoom()->shouldHaveType('ClassRoom');
     }
+
+    function it_has_a_start_date()
+    {
+        $this->setStartDate(new \DateTime());
+        $this->getStartDate()->shouldHaveType('DateTime');
+    }
 }

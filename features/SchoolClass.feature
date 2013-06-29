@@ -8,3 +8,5 @@ Feature: Create a school class
     Then I get the name
       And I get the teacher
       And I get the class room
+      And I get the start date
+      And I get the duration
