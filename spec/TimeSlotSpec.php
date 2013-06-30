@@ -24,12 +24,8 @@ class TimeSlotSpec extends ObjectBehavior
 
     function it_has_a_school_class()
     {
-        $prophet = new Prophet();
-        $prophecy = $prophet->prophesize();
-        $prophecy->willExtend('SchoolClass');
-        $dummySchoolClass = $prophecy->reveal();
 
-        $this->setSchoolClass($dummySchoolClass);
+        $this->setSchoolClass($this->schoolClass);
         $this->isAllocated()->shouldBe(true);
     }
 

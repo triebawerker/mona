@@ -1,6 +1,8 @@
 <?php
+
 use Behat\Behat\Context\BehatContext;
 use Behat\Behat\Exception\PendingException;
+
 class SchoolClassContext extends BehatContext
 {
 
@@ -24,7 +26,7 @@ class SchoolClassContext extends BehatContext
      */
     public function aSchedule()
     {
-        $this->schedule = new Schedule();
+        $this->schedule = new Schedule(new TimeSlotFactory());
         $this->schedule->setDays(7);
         $this->schedule->setHours(24);
         $this->schedule->setTimeSlotLength(15);
@@ -58,30 +60,13 @@ class SchoolClassContext extends BehatContext
         $this->schedule->addSchoolClass($this->schoolClass);
     }
 
-
-    /**
-     * @Then /^I should get a List of available classes$/
-     */
-    public function iShouldGetAListOfAvailableClasses()
-    {
-        assertTrue(is_array($this->schedule->getList()));
-    }
-
-    /**
-     * @When /^I have added time slots$/
-     */
-    public function iHaveAddedTimeSlots()
-    {
-        $this->schedule->addTimeslot($this->timeSlot);
-    }
-
     /**
      * @Then /^I should get a list of time slots$/
      */
     public function iShouldGetAListOfTimeSlots()
     {
-        $this->schedule->addTimeslot($this->timeSlot);
-        assertTrue(is_array($this->schedule->getFreeSlots()));
+        $this->schedule->getSchoolClassList($this->timeSlot);
+        assertTrue(is_array($this->schedule->getSchoolClassList()));
     }
 
     /**
@@ -89,8 +74,7 @@ class SchoolClassContext extends BehatContext
      */
     public function iAssignASchoolClassToATimeSlot()
     {
-        $this->timeSlot->setSchoolClass($this->schoolClass);
-        $this->schedule->addTimeslot($this->timeSlot);
+        $this->schedule->addSchoolClass($this->schoolClass);
 
         $slots = $this->schedule->getBookedSlots();
         assertTrue(is_array($slots));
@@ -106,22 +90,15 @@ class SchoolClassContext extends BehatContext
     }
 
     /**
-     * @Given /^could not be allocated again$/
-     */
-    public function couldNotBeAllocatedAgain()
-    {
-        assertCount(0, $this->schedule->getFreeSlots());
-    }
-
-    /**
      * @Given /^has a start point$/
      */
     public function hasAStartPoint()
     {
-        $this->schedule->addSchoolClass($this->schoolClass);
         $slots = $this->schedule->getBookedSlots();
+        assertTrue(is_array($slots));
+
         foreach($slots as $slot) {
-            assertGreaterThan(0, $slot->getStartPoint());
+            assertEquals(62, $slot->getStartPoint());
         }
     }
 
@@ -132,13 +109,13 @@ class SchoolClassContext extends BehatContext
     {
         $slots = $this->schedule->getBookedSlots();
         foreach($slots as $slot) {
-            assertGreaterThan(0, $slot->getEndPoint());
+            assertEquals(68, $slot->getEndPoint());
         }
     }
 
 
     /**
-     * @When /^a time time slot has a length of (\d+) minutes$/
+     * @When /^a time slot has a length of (\d+) minutes$/
      */
     public function aTimeTimeSlotHasALengthOfMinutes($arg1)
     {
@@ -177,14 +154,6 @@ class SchoolClassContext extends BehatContext
      * @When /^I set up time slots in my schedule$/
      */
     public function iSetUpTimeSlotsInMySchedule()
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Then /^the time slots must not overlap$/
-     */
-    public function theTimeSlotsMustNotOverlap()
     {
         throw new PendingException();
     }

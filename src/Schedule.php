@@ -2,8 +2,6 @@
 
 class Schedule
 {
-
-
     /**
      * @var SchoolClass
      */
@@ -13,6 +11,12 @@ class Schedule
      * @var array TimeSlot
      */
     private $timeSlots = array();
+
+    /**
+     * @var TimeSlotFactory
+     */
+    private $timeSlotFactory;
+
     /**
      * @var int
      */
@@ -28,19 +32,35 @@ class Schedule
      */
     private $hours;
 
-    public function addSchoolClass(SchoolClass $schoolClass)
+
+    public function __construct($timeSlotFactory)
     {
-        $timeSlot = new TimeSlot();
+        $this->timeSlotFactory = $timeSlotFactory;
+    }
+
+    public function addSchoolClass(SchoolClass $schoolClass, TimeSlot $timeSlot = null)
+    {
+        /* TODO  use timeSlotFactory*/
+        if (null === $timeSlot ) {
+            $timeSlot = $this->timeSlotFactory->createTimeSlot();
+        }
+
+        $timeSlot->setSchoolClass($schoolClass);
+        $timeSlot->setStartPoint();
+        $timeSlot->setEndPoint();
+
+        if ($this->hasTimeSlotOverlap($timeSlot)) {
+            throw new Exception();
+        }
+
         $this->addTimeslot($timeSlot);
         array_push($this->schoolClass, $schoolClass);
     }
 
-    public function getSchool()
-    {
-        return $this->schoolClass;
-    }
-
-    public function getList()
+    /**
+     * @return SchoolClass[]
+     */
+    public function getSchoolClassList()
     {
         return $this->schoolClass;
     }
@@ -59,7 +79,7 @@ class Schedule
     public function getBookedSlots()
     {
         $bookedSlots = array();
-        foreach ($this->timeSlots as $slot) {
+        foreach ($this->timeSlots as $slot) {;
             if ($slot->isAllocated()) {
                 array_push($bookedSlots, $slot);
             } else {
@@ -103,5 +123,31 @@ class Schedule
     {
         $slotLengthPerHour = 60/$this->getTimeSlotLength();
         return $this->getDays() * $this->getHours() * $slotLengthPerHour;
+    }
+
+    /**
+     * @param TimeSlot $timeSlot
+     * @return bool
+     */
+    private function hasTimeSlotOverlap(TimeSlot $timeSlot)
+    {
+        $slots = $this->getBookedSlots();
+
+        for ($i = 0; $i<sizeof($slots); $i++) {
+            if ($slots[$i]->getEndPoint() < $timeSlot->getStartPoint()) {
+                if (isset($slots[$i+1])) {
+                    if ($slots[$i+1]->getStartPoint() > $timeSlot->getEndPoint()) {
+                        return false;
+                    } else {
+                    return true;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        }
+
     }
 }
